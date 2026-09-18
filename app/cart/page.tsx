@@ -1,16 +1,59 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
-import { products } from '@/data/products';
+import { useEffect, useMemo, useState } from 'react';
+import type { Product } from '@/data/products';
 
-const initialCart = [
-  { ...products[0], quantity: 1 },
-  { ...products[2], quantity: 2 },
-];
+type CartItem = Product & { quantity: number };
 
 export default function CartPage() {
-  const [cart, setCart] = useState(initialCart);
+  const [cart, setCart] = useState<CartItem[]>([]);
+
+  useEffect(() => {
+    const stored = window.localStorage.getItem('apna-cart');
+    if (stored) {
+      setCart(JSON.parse(stored));
+    } else {
+      setCart([
+        {
+          ...({
+            id: 1,
+            name: 'Urban Pro Headphones',
+            category: 'Audio',
+            price: 199,
+            oldPrice: 249,
+            rating: 4.8,
+            badge: 'Best Seller',
+            accent: 'from-violet-500 to-indigo-600',
+            emoji: '🎧',
+            description: 'Immersive sound with deep bass and all-day comfort.',
+          } as Product),
+          quantity: 1,
+        },
+        {
+          ...({
+            id: 3,
+            name: 'Aero Bottle',
+            category: 'Lifestyle',
+            price: 39,
+            oldPrice: 59,
+            rating: 4.9,
+            badge: 'Hot',
+            accent: 'from-emerald-500 to-teal-600',
+            emoji: '💧',
+            description: 'Insulated stainless steel bottle built for daily adventure.',
+          } as Product),
+          quantity: 2,
+        },
+      ]);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (cart.length > 0) {
+      window.localStorage.setItem('apna-cart', JSON.stringify(cart));
+    }
+  }, [cart]);
 
   const subtotal = useMemo(
     () => cart.reduce((sum, item) => sum + item.price * item.quantity, 0),

@@ -1,90 +1,72 @@
-'use client';
+import './globals.css';
+import type { Metadata } from 'next';
+import Link from 'next/link';
 
-import { useState } from 'react';
+export const metadata: Metadata = {
+  title: 'Apna Store',
+  description: 'Premium shopping experience for modern lifestyles.',
+};
 
-export default function CheckoutPage() {
-  const [submitted, setSubmitted] = useState(false);
+const navItems = [
+  { name: 'Home', href: '/' },
+  { name: 'Products', href: '/products' },
+  { name: 'Cart', href: '/cart' },
+  { name: 'Checkout', href: '/checkout' },
+  { name: 'Admin', href: '/admin' },
+];
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setSubmitted(true);
-  };
-
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <main className="mx-auto max-w-6xl px-4 py-12 sm:px-6 lg:px-8">
-      <div className="mb-8">
-        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-violet-600">Secure checkout</p>
-        <h1 className="mt-2 text-4xl font-black text-slate-900">Complete your order</h1>
-      </div>
+    <html lang="en">
+      <body className="bg-slate-50 text-slate-900 antialiased">
+        <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/80 backdrop-blur-md">
+          <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+            <Link href="/" className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-600 text-lg font-black text-white">
+                A
+              </div>
+              <div>
+                <p className="text-lg font-black tracking-tight text-slate-900">Apna Store</p>
+                <p className="text-[10px] uppercase tracking-[0.22em] text-slate-500">Shop smarter</p>
+              </div>
+            </Link>
 
-      {submitted ? (
-        <div className="rounded-[2rem] border border-emerald-200 bg-emerald-50 p-10 text-center shadow-soft">
-          <div className="text-5xl">✅</div>
-          <h2 className="mt-4 text-3xl font-black text-emerald-900">Order placed successfully!</h2>
-          <p className="mt-2 text-emerald-700">Your order is confirmed and will be delivered soon.</p>
-        </div>
-      ) : (
-        <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr]">
-          <form onSubmit={handleSubmit} className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-soft">
-            <div className="grid gap-5 md:grid-cols-2">
-              <label className="text-sm font-medium text-slate-700">
-                Full name
-                <input required className="mt-2 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3" placeholder="Your name" />
-              </label>
-              <label className="text-sm font-medium text-slate-700">
-                Email
-                <input required type="email" className="mt-2 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3" placeholder="you@example.com" />
-              </label>
-              <label className="text-sm font-medium text-slate-700 md:col-span-2">
-                Address
-                <input required className="mt-2 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3" placeholder="Street address" />
-              </label>
-              <label className="text-sm font-medium text-slate-700">
-                City
-                <input required className="mt-2 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3" placeholder="City" />
-              </label>
-              <label className="text-sm font-medium text-slate-700">
-                ZIP code
-                <input required className="mt-2 w-full rounded-2xl border border-slate-300 bg-slate-50 px-4 py-3" placeholder="110001" />
-              </label>
+            <nav className="hidden items-center gap-8 md:flex">
+              {navItems.map((item) => (
+                <Link key={item.href} href={item.href} className="text-sm font-medium text-slate-600 transition hover:text-slate-900">
+                  {item.name}
+                </Link>
+              ))}
+            </nav>
+
+            <div className="flex items-center gap-3">
+              <button className="hidden rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 sm:inline-block">
+                Log in
+              </button>
+              <Link href="/cart" className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-700">
+                Cart (2)
+              </Link>
             </div>
+          </div>
+        </header>
 
-            <div className="mt-8">
-              <h3 className="text-lg font-bold text-slate-900">Payment method</h3>
-              <div className="mt-4 space-y-3">
-                {['UPI', 'Credit card', 'Cash on delivery'].map((method) => (
-                  <label key={method} className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-3 text-sm font-medium text-slate-700">
-                    <input type="radio" name="payment" defaultChecked={method === 'UPI'} />
-                    <span>{method}</span>
-                  </label>
-                ))}
-              </div>
+        {children}
+
+        <footer className="border-t border-slate-200 bg-white">
+          <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-10 text-sm text-slate-600 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+            <div>
+              <p className="text-lg font-black text-slate-900">Apna Store</p>
+              <p className="mt-1">Modern essentials for everyday life.</p>
             </div>
-
-            <button type="submit" className="mt-8 w-full rounded-full bg-violet-600 px-5 py-3 text-sm font-semibold text-white hover:bg-violet-700">
-              Place order
-            </button>
-          </form>
-
-          <aside className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-soft">
-            <h2 className="text-2xl font-bold text-slate-900">Order summary</h2>
-            <div className="mt-6 space-y-4 text-sm text-slate-600">
-              <div className="flex justify-between">
-                <span>Urban Pro Headphones</span>
-                <span>₹199</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Aero Bottle</span>
-                <span>₹78</span>
-              </div>
-              <div className="flex justify-between border-t border-slate-200 pt-4 text-base font-bold text-slate-900">
-                <span>Total</span>
-                <span>₹277</span>
-              </div>
+            <div className="flex gap-6">
+              <Link href="/products">Products</Link>
+              <Link href="/cart">Cart</Link>
+              <Link href="/checkout">Checkout</Link>
+              <Link href="/admin">Admin</Link>
             </div>
-          </aside>
-        </div>
-      )}
-    </main>
+          </div>
+        </footer>
+      </body>
+    </html>
   );
 }

@@ -1,4 +1,17 @@
-export const products = [
+export type Product = {
+  id: number;
+  name: string;
+  category: string;
+  price: number;
+  oldPrice: number;
+  rating: number;
+  badge: string;
+  accent: string;
+  emoji: string;
+  description: string;
+};
+
+export const products: Product[] = [
   {
     id: 1,
     name: 'Urban Pro Headphones',
@@ -32,7 +45,7 @@ export const products = [
     rating: 4.9,
     badge: 'Hot',
     accent: 'from-emerald-500 to-teal-600',
-    emoji: '💧',
+    emoji: '��',
     description: 'Insulated stainless steel bottle built for daily adventure.',
   },
   {
